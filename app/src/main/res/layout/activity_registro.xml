@@ -37,7 +37,7 @@
         <Spinner
             android:id="@+id/spinnerRol"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="42dp" />
 
         <Button
             android:id="@+id/btnRegistrar"
@@ -46,5 +46,15 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#1976D2"
             android:textColor="#FFFFFF"/>
+
+        <Button
+            android:id="@+id/btnReturn_adm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/design_default_color_error"
+            android:text="REGRESAR"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 </ScrollView>

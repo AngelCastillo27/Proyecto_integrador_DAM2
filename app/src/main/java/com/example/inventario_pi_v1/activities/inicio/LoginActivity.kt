@@ -1,4 +1,4 @@
-package com.example.inventario_pi_v1.activities
+package com.example.inventario_pi_v1.activities.inicio
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.inventario_pi_v1.R
+import com.example.inventario_pi_v1.activities.inicio.InicioGenericoActivity
 import com.example.inventario_pi_v1.network.Conexion
 import java.net.HttpURLConnection
 import java.net.URL

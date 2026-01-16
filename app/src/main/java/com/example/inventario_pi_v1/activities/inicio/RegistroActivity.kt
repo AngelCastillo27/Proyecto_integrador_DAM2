@@ -1,6 +1,5 @@
-package com.example.inventario_pi_v1.activities
+package com.example.inventario_pi_v1.activities.inicio
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
