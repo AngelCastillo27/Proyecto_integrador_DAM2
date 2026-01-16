@@ -18,6 +18,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var etUsuario: EditText
     private lateinit var etPassword: EditText
     private lateinit var btnLogin: Button
+    private lateinit var btnReturn: Button // ✅ declaramos el botón
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
         etUsuario = findViewById(R.id.etUsuario)
         etPassword = findViewById(R.id.etPassword)
         btnLogin = findViewById(R.id.btnLogin)
+        btnReturn = findViewById(R.id.btnReturn) // ✅ enlazamos el botón
 
         rolSeleccionado = intent.getStringExtra("ROL_SELECCIONADO") ?: ""
 
@@ -39,6 +41,11 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 login(usuario, password)
             }
+        }
+
+        // 🔙 BOTÓN REGRESAR → vuelve a SelectorRolActivity
+        btnReturn.setOnClickListener {
+            finish()
         }
     }
 
@@ -53,32 +60,34 @@ class LoginActivity : AppCompatActivity() {
                 val datos = "usuario=$usuario&password=$password"
                 conexion.outputStream.write(datos.toByteArray())
 
-                // Leemos la respuesta del PHP
                 val respuesta = conexion.inputStream.bufferedReader().readLine()
 
                 runOnUiThread {
-                    // 1. Limpiamos la respuesta de espacios o saltos de línea invisibles
                     val respuestaLimpia = respuesta?.trim() ?: ""
 
                     if (respuestaLimpia.startsWith("ok")) {
-                        // 2. Extraemos el rol y aplicamos .trim() nuevamente
                         val partes = respuestaLimpia.split("|")
                         val rolBD = if (partes.size > 1) partes[1].trim() else ""
 
-                        // 3. Comparación robusta (ignora mayúsculas/minúsculas)
                         if (rolBD.equals(rolSeleccionado, ignoreCase = true)) {
-                            val intent = Intent(this, InicioGenericoActivity::class.java) // <--- Cambiado                            // IMPORTANTE: Enviamos el ROL tal cual está en la BD (ADMIN)
+                            val intent = Intent(this, InicioGenericoActivity::class.java)
                             intent.putExtra("USUARIO", usuario)
-                            intent.putExtra("ROL", rolBD.uppercase())
-
+                            intent.putExtra("ROL", rolBD)
                             startActivity(intent)
                             finish()
                         } else {
-                            // Mensaje de ayuda para debug
-                            Toast.makeText(this, "Elegiste $rolSeleccionado pero eres $rolBD", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this,
+                                "Elegiste $rolSeleccionado pero eres $rolBD",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     } else {
-                        Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Usuario o contraseña incorrectos",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 

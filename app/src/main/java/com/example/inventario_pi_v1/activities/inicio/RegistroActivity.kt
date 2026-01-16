@@ -1,5 +1,6 @@
 package com.example.inventario_pi_v1.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -16,20 +17,20 @@ class RegistroActivity : AppCompatActivity() {
     private lateinit var etApellidos: EditText
     private lateinit var spinnerRol: Spinner
     private lateinit var btnRegistrar: Button
+    private lateinit var btnReturnAdm: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registro)
 
-        // ENLAZAR VISTAS
         etUsuario = findViewById(R.id.etUsuario)
         etPassword = findViewById(R.id.etPassword)
         etNombres = findViewById(R.id.etNombres)
         etApellidos = findViewById(R.id.etApellidos)
         spinnerRol = findViewById(R.id.spinnerRol)
         btnRegistrar = findViewById(R.id.btnRegistrar)
+        btnReturnAdm = findViewById(R.id.btnReturn_adm)
 
-        // LLENAR EL SPINNER CON ROLES
         val roles = arrayOf("ADMIN", "OPERARIO")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, roles)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -38,16 +39,21 @@ class RegistroActivity : AppCompatActivity() {
         btnRegistrar.setOnClickListener {
             registrarUsuario()
         }
+
+        btnReturnAdm.setOnClickListener {
+
+            finish()
+        }
     }
 
     private fun registrarUsuario() {
-        val usuario = etUsuario.text.toString()
-        val password = etPassword.text.toString()
-        val nombres = etNombres.text.toString()
-        val apellidos = etApellidos.text.toString()
+        val usuario = etUsuario.text.toString().trim()
+        val password = etPassword.text.toString().trim()
+        val nombres = etNombres.text.toString().trim()
+        val apellidos = etApellidos.text.toString().trim()
         val rol = spinnerRol.selectedItem.toString()
 
-        if(usuario.isEmpty() || password.isEmpty() || nombres.isEmpty() || apellidos.isEmpty()){
+        if (usuario.isEmpty() || password.isEmpty() || nombres.isEmpty() || apellidos.isEmpty()) {
             Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show()
             return
         }
@@ -63,20 +69,46 @@ class RegistroActivity : AppCompatActivity() {
                     "usuario=$usuario&password=$password&nombres=$nombres&apellidos=$apellidos&rol=$rol"
 
                 conexion.outputStream.write(datos.toByteArray())
+                conexion.outputStream.flush()
 
-                val respuesta = conexion.inputStream.bufferedReader().readLine()
+                val respuesta = conexion.inputStream.bufferedReader().readLine().trim()
 
                 runOnUiThread {
-                    Toast.makeText(this, respuesta, Toast.LENGTH_SHORT).show()
-                    if (respuesta.contains("correctamente")) {
-                        finish()
+                    when (respuesta) {
+                        "USUARIO_REGISTRADO" -> {
+                            Toast.makeText(
+                                this,
+                                "Usuario registrado correctamente",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            finish()
+                        }
+
+                        "ERROR_USUARIO_EXISTE" -> {
+                            Toast.makeText(
+                                this,
+                                "Este usuario ya existe",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                        else -> {
+                            Toast.makeText(
+                                this,
+                                "Error al registrar usuario",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
 
             } catch (e: Exception) {
-                e.printStackTrace()
                 runOnUiThread {
-                    Toast.makeText(this, "Error al conectar con el servidor", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Error al conectar con el servidor",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }.start()
