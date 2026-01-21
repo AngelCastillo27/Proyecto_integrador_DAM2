@@ -311,7 +311,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btnRetorno_depgen"
+            android:id="@+id/btnRetorno_departamentos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|start"

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="30dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Snacks"
+        android:layout_gravity="center"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- ScrollView solo para los productos -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingBottom="8dp">
+
+        <LinearLayout
+            android:id="@+id/contenedorProductos"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
+
+    <!-- Botones fijos abajo -->
+    <Button
+        android:id="@+id/btnAgregar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Agregar producto"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/btnGuardar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar cambios"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="@color/design_default_color_primary_variant"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/btnRetorno_depgen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="REGRESAR"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="@color/design_default_color_error"
+        android:layout_gravity="start"
+        android:layout_marginTop="8dp"/>
+
+</LinearLayout>

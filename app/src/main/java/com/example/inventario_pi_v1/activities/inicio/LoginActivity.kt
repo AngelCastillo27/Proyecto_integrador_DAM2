@@ -25,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // ENLAZAR VISTAS
+        // ENLAZAR VISTAS con variables
         etUsuario = findViewById(R.id.etUsuario)
         etPassword = findViewById(R.id.etPassword)
         btnLogin = findViewById(R.id.btnLogin)
@@ -68,11 +68,13 @@ class LoginActivity : AppCompatActivity() {
 
                     if (respuestaLimpia.startsWith("ok")) {
                         val partes = respuestaLimpia.split("|")
-                        val rolBD = if (partes.size > 1) partes[1].trim() else ""
+
+                        val usuarioBD = if (partes.size > 1) partes[1].trim() else ""
+                        val rolBD = if (partes.size > 2) partes[2].trim() else ""
 
                         if (rolBD.equals(rolSeleccionado, ignoreCase = true)) {
                             val intent = Intent(this, InicioGenericoActivity::class.java)
-                            intent.putExtra("USUARIO", usuario)
+                            intent.putExtra("USUARIO", usuarioBD)
                             intent.putExtra("ROL", rolBD)
                             startActivity(intent)
                             finish()
@@ -83,7 +85,9 @@ class LoginActivity : AppCompatActivity() {
                                 Toast.LENGTH_LONG
                             ).show()
                         }
-                    } else {
+
+
+                } else {
                         Toast.makeText(
                             this,
                             "Usuario o contraseña incorrectos",

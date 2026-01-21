@@ -4,11 +4,13 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
+
+
     <application
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:allowBackup="true"
-        android:label="Inventario"
         android:icon="@mipmap/ic_launcher"
+        android:label="Inventario"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
 
@@ -33,10 +35,13 @@
             android:name=".activities.inicio.RegistroActivity"
             android:exported="false" />
 
-        <activity android:name=".activities.departamentos.ProductosDepartamentoActivity" />
+        <activity
+            android:name=".activities.departamentos.DepartamentosActivity"
+            android:exported="false" />
 
         <activity
-            android:name=".activities.departamentos.DepartamentosActivity" />
+            android:name=".activities.departamentos.SnacksActivity"
+            android:exported="false" />
 
 
 

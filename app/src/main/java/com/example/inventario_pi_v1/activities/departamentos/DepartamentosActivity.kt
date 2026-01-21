@@ -13,30 +13,19 @@ class DepartamentosActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_departamentos)
 
-        // Función reutilizable
-        fun abrirDepartamento(id: Int, nombre: String) {
-            findViewById<LinearLayout>(id).setOnClickListener {
-                val intent = Intent(this, ProductosDepartamentoActivity::class.java)
-                intent.putExtra("DEPARTAMENTO", nombre)
-                startActivity(intent)
+        // SOLO SNACKS
+        findViewById<LinearLayout>(R.id.btnSnacks).setOnClickListener {
+            val usuario = intent.getStringExtra("USUARIO") ?: ""
+
+            findViewById<LinearLayout>(R.id.btnSnacks).setOnClickListener {
+                val i = Intent(this, SnacksActivity::class.java)
+                i.putExtra("USUARIO", usuario)
+                startActivity(i)
             }
+
         }
 
-        abrirDepartamento(R.id.btnSnacks, "Snacks")
-        abrirDepartamento(R.id.btnFrutosSecos, "Frutos Secos")
-        abrirDepartamento(R.id.btnGaseosas, "Refrescos")
-        abrirDepartamento(R.id.btnAlcohol, "Bebidas alcohólicas")
-        abrirDepartamento(R.id.btnCigarros, "Tabaco")
-        abrirDepartamento(R.id.btnFrutas, "Frutas")
-        abrirDepartamento(R.id.btnLacteos, "Lácteos")
-        abrirDepartamento(R.id.btnPanaderia, "Panadería")
-        abrirDepartamento(R.id.btnAlimentos, "Legumbres")
-        abrirDepartamento(R.id.btnCuidadoPersonal, "Cuidado Personal")
-        abrirDepartamento(R.id.btnHogar, "Hogar")
-        abrirDepartamento(R.id.btnOtros, "Otros")
-
-        // Botón regresar
-        findViewById<Button>(R.id.btnRetorno_depgen).setOnClickListener {
+        findViewById<Button>(R.id.btnRetorno_departamentos).setOnClickListener {
             finish()
         }
     }

@@ -43,10 +43,11 @@ class InicioGenericoActivity : AppCompatActivity() {
         }
 
         btnGenerarInventario.setOnClickListener {
-            startActivity(Intent(this, DepartamentosActivity::class.java))
-            //finish()
-
+            val intent = Intent(this, DepartamentosActivity::class.java)
+            intent.putExtra("USUARIO", usuario)
+            startActivity(intent)
         }
+
 
         btnReturn.setOnClickListener {
 
