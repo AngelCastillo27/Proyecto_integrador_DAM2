@@ -40,7 +40,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".activities.departamentos.SnacksActivity"
+            android:name=".activities.departamentos.ProductosActivity"
             android:exported="false" />
 
 

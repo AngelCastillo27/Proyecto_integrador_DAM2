@@ -9,36 +9,39 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
-class LicorActivity : AppCompatActivity() {
+class ProductosActivity : AppCompatActivity() {
 
     private lateinit var contenedor: LinearLayout
     private lateinit var usuario: String
+    private lateinit var departamento: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_snacks)
-
-        contenedor = findViewById(R.id.contenedorProductos)
-        val btnAgregar = findViewById<Button>(R.id.btnAgregar)
-        val btnGuardar = findViewById<Button>(R.id.btnGuardar)
-        val btnRetorno = findViewById<Button>(R.id.btnRetorno_depgen)
+        setContentView(R.layout.activity_productos)
 
         usuario = intent.getStringExtra("USUARIO") ?: ""
+        departamento = intent.getStringExtra("DEPARTAMENTO") ?: ""
 
-        // 🔹 cargar snacks existentes
-        cargarSnacks()
+        findViewById<TextView>(R.id.tvTitulo).text = departamento
 
-        btnAgregar.setOnClickListener {
+        contenedor = findViewById(R.id.contenedorProductos)
+
+        findViewById<Button>(R.id.btnAgregar).setOnClickListener {
             agregarFila("", "")
         }
 
-        btnGuardar.setOnClickListener {
+        findViewById<Button>(R.id.btnGuardar).setOnClickListener {
             guardarProductos()
         }
 
-        btnRetorno.setOnClickListener {
+        findViewById<Button>(R.id.btnRetorno_depgen).setOnClickListener {
             finish()
         }
+
+
+
+
+        cargarProductos()
     }
 
     // ==========================
@@ -72,31 +75,33 @@ class LicorActivity : AppCompatActivity() {
         fila.addView(etCantidad)
         fila.addView(btnEliminar)
 
-        // 🔹 insertar arriba
         contenedor.addView(fila, 0)
     }
 
     // ==========================
     // CARGAR DESDE BBDD
     // ==========================
-    private fun cargarSnacks() {
+    private fun cargarProductos() {
         Thread {
             try {
-                val url = URL("http://10.0.2.2/inventario/listar_snacks.php")
+                val url = URL("http://10.0.2.2/inventario/listar_productos.php")
                 val conexion = url.openConnection() as HttpURLConnection
                 conexion.requestMethod = "POST"
                 conexion.doOutput = true
 
-                val data = "usuario=${URLEncoder.encode(usuario, "UTF-8")}"
+                val data =
+                    "usuario=${URLEncoder.encode(usuario, "UTF-8")}" +
+                            "&departamento=${URLEncoder.encode(departamento, "UTF-8")}"
+
                 conexion.outputStream.write(data.toByteArray())
 
                 val respuesta = conexion.inputStream.bufferedReader().readText()
 
                 runOnUiThread {
                     if (respuesta.startsWith("OK|")) {
-                        val data = respuesta.removePrefix("OK|")
-                        if (data.isNotBlank()) {
-                            val filas = data.split(";")
+                        val datos = respuesta.removePrefix("OK|")
+                        if (datos.isNotBlank()) {
+                            val filas = datos.split(";")
                             for (f in filas) {
                                 val partes = f.split(":")
                                 if (partes.size == 2) {
@@ -111,7 +116,7 @@ class LicorActivity : AppCompatActivity() {
 
             } catch (e: Exception) {
                 runOnUiThread {
-                    Toast.makeText(this, "Error al cargar snacks", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Error al cargar productos", Toast.LENGTH_LONG).show()
                 }
             }
         }.start()
@@ -144,7 +149,7 @@ class LicorActivity : AppCompatActivity() {
     private fun enviarABaseDatos(productos: ArrayList<String>) {
         Thread {
             try {
-                val url = URL("http://10.0.2.2/inventario/guardar_snacks.php")
+                val url = URL("http://10.0.2.2/inventario/guardar_productos.php")
                 val conexion = url.openConnection() as HttpURLConnection
                 conexion.requestMethod = "POST"
                 conexion.doOutput = true
@@ -155,6 +160,7 @@ class LicorActivity : AppCompatActivity() {
 
                 val data =
                     "usuario=${URLEncoder.encode(usuario, "UTF-8")}" +
+                            "&departamento=${URLEncoder.encode(departamento, "UTF-8")}" +
                             "&productos=${URLEncoder.encode(productos.joinToString(","), "UTF-8")}"
 
                 conexion.outputStream.use {
@@ -169,10 +175,9 @@ class LicorActivity : AppCompatActivity() {
 
             } catch (e: Exception) {
                 runOnUiThread {
-                    Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Error al guardar", Toast.LENGTH_LONG).show()
                 }
             }
-
         }.start()
     }
 }
