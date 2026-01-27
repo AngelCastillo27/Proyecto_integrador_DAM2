@@ -25,6 +25,22 @@ class DepartamentosActivity : AppCompatActivity() {
 
         }
 
+        //Licores
+        findViewById<LinearLayout>(R.id.btnLicor).setOnClickListener {
+            val usuario = intent.getStringExtra("USUARIO") ?: ""
+
+            findViewById<LinearLayout>(R.id.btnLicor).setOnClickListener {
+                val i = Intent(this, LicorActivity::class.java)
+                i.putExtra("USUARIO", usuario)
+                startActivity(i)
+            }
+        }
+
+
+
+
+
+
         findViewById<Button>(R.id.btnRetorno_departamentos).setOnClickListener {
             finish()
         }

@@ -6,8 +6,8 @@
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="3"
-        android:padding="16dp">
+        android:columnCount="2"
+        android:padding="30dp">
 
         <!-- SNACKS -->
         <LinearLayout
@@ -34,9 +34,12 @@
 
         </LinearLayout>
 
-        <!-- FRUTOS SECOS -->
+
+
+
+        <!-- Alimentos -->
         <LinearLayout
-            android:id="@+id/btnFrutosSecos"
+            android:id="@+id/btnLicor"
             android:layout_width="0dp"
             android:layout_columnWeight="1"
             android:orientation="vertical"
@@ -46,12 +49,12 @@
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@drawable/ic_frutos_secos"/>
+                android:src="@drawable/ic_licor"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Frutos Secos"
+                android:text="Licores"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
@@ -59,9 +62,9 @@
 
         </LinearLayout>
 
-        <!-- GASEOSAS -->
+        <!-- cuidado personal -->
         <LinearLayout
-            android:id="@+id/btnGaseosas"
+            android:id="@+id/btnTabaco"
             android:layout_width="0dp"
             android:layout_columnWeight="1"
             android:orientation="vertical"
@@ -71,57 +74,7 @@
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@drawable/ic_gaseosas"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Refrescos"
-                android:textStyle="bold"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"/>
-
-        </LinearLayout>
-
-        <!-- ALCOHOL -->
-        <LinearLayout
-            android:id="@+id/btnAlcohol"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_alcohol"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Alcohólicas"
-                android:textStyle="bold"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"/>
-
-        </LinearLayout>
-
-        <!-- CIGARROS -->
-        <LinearLayout
-            android:id="@+id/btnCigarros"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_cigarros"/>
+                android:src="@drawable/ic_cigarro"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -134,134 +87,9 @@
 
         </LinearLayout>
 
-        <!-- FRUTAS -->
-        <LinearLayout
-            android:id="@+id/btnFrutas"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_frutas"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Frutas"
-                android:textStyle="bold"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"/>
-
-        </LinearLayout>
-
-        <!-- LÁCTEOS -->
-        <LinearLayout
-            android:id="@+id/btnLacteos"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_lacteos"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lácteos"
-                android:textStyle="bold"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"/>
-
-        </LinearLayout>
-
-        <!-- PANADERÍA -->
-        <LinearLayout
-            android:id="@+id/btnPanaderia"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_panaderia"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Panaderia"
-                android:textStyle="bold"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"/>
-
-        </LinearLayout>
-
-        <!-- Alimentos -->
-        <LinearLayout
-            android:id="@+id/btnAlimentos"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_alimentos"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Legumbres"
-                android:textStyle="bold"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"/>
-
-        </LinearLayout>
-
-        <!-- cuidado personal -->
-        <LinearLayout
-            android:id="@+id/btnCuidadoPersonal"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_cuidadopersonal"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cuidado Personal"
-                android:textStyle="bold"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"/>
-
-        </LinearLayout>
-
         <!-- hogar -->
         <LinearLayout
-            android:id="@+id/btnHogar"
+            android:id="@+id/btnComplementos"
             android:layout_width="0dp"
             android:layout_columnWeight="1"
             android:orientation="vertical"
@@ -271,12 +99,12 @@
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@drawable/ic_hogar"/>
+                android:src="@drawable/ic_comple_hielo"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hogar"
+                android:text="Complementos"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
@@ -321,4 +149,8 @@
             android:textColor="#FFFFFF" />
 
     </GridLayout>
+
+
+
+
 </ScrollView>
