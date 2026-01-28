@@ -1,0 +1,230 @@
+conexion.php
+<?php
+$hostname = 'localhost';
+$database = 'inventario_db';
+$username = 'root';
+$password = '';
+
+// Crear la conexión
+$conexion = mysqli_connect($hostname, $username, $password, $database);
+
+// Verificar la conexión
+if (!$conexion) {
+    die("Error de conexión: " . mysqli_connect_error());
+}
+
+// Configurar para que reconozca tildes y eñes
+mysqli_set_charset($conexion, "utf8");
+?>
+#################################################
+#################################################
+#################################################
+#################################################
+
+eliminar_inventario.php
+<?php
+include 'conexion.php';
+
+$inventario_id = $_POST['inventario_id'] ?? '';
+
+if ($inventario_id === '') {
+    echo "ID_VACIO";
+    exit;
+}
+
+mysqli_query(
+    $conexion,
+    "DELETE FROM inventario_productos WHERE inventario_id='$inventario_id'"
+);
+
+mysqli_query(
+    $conexion,
+    "DELETE FROM inventarios WHERE id='$inventario_id'"
+);
+
+echo "OK";
+
+#################################################
+#################################################
+#################################################
+#################################################
+
+guardar_productos.php
+
+<?php
+// Desactivar reporte de errores HTML para que no rompan la respuesta de Android
+error_reporting(0);
+ini_set('display_errors', 0);
+
+include 'conexion.php';
+
+$usuario = $_POST['usuario'] ?? '';
+$departamento = $_POST['departamento'] ?? '';
+$productos = $_POST['productos'] ?? '';
+
+if ($usuario === '' || $departamento === '' || $productos === '') {
+    echo "DATOS_INCOMPLETOS";
+    exit;
+}
+
+// 1. Obtener usuario_id
+$resUser = mysqli_query($conexion, "SELECT id FROM usuarios WHERE usuario='$usuario'");
+if (!$resUser || mysqli_num_rows($resUser) === 0) {
+    echo "USUARIO_NO_EXISTE";
+    exit;
+}
+$filaUser = mysqli_fetch_assoc($resUser);
+$usuario_id = $filaUser['id'];
+
+// 2. Buscar o crear inventario
+$resInv = mysqli_query($conexion, "SELECT id FROM inventarios WHERE usuario_id='$usuario_id' ORDER BY id DESC LIMIT 1");
+
+if (!$resInv || mysqli_num_rows($resInv) === 0) {
+    mysqli_query($conexion, "INSERT INTO inventarios (usuario_id, turno, fecha_hora) VALUES ('$usuario_id','M',NOW())");
+    $inventario_id = mysqli_insert_id($conexion);
+} else {
+    $filaInv = mysqli_fetch_assoc($resInv);
+    $inventario_id = $filaInv['id'];
+}
+
+if (!$inventario_id) {
+    echo "ERROR_ID_INVENTARIO";
+    exit;
+}
+
+// 3. Borrar productos previos de este departamento en este inventario
+mysqli_query($conexion, "DELETE FROM inventario_productos WHERE inventario_id='$inventario_id' AND departamento='$departamento'");
+
+// 4. Insertar nuevos productos
+$lista = explode(",", $productos);
+foreach ($lista as $p) {
+    if (empty(trim($p))) continue;
+    $partes = explode(":", $p);
+
+    if (count($partes) >= 2) {
+        $nombre = mysqli_real_escape_string($conexion, $partes[0]);
+        $cantidad = intval($partes[1]);
+        mysqli_query($conexion, "INSERT INTO inventario_productos (inventario_id, departamento, nombre, cantidad) VALUES ('$inventario_id','$departamento','$nombre','$cantidad')");
+    }
+}
+
+echo "OK";
+?>
+
+#################################################
+#################################################
+#################################################
+#################################################
+
+
+listar_productos.php
+<?php
+error_reporting(0);
+ini_set('display_errors', 0);
+
+include 'conexion.php';
+
+$usuario = $_POST['usuario'] ?? '';
+$departamento = $_POST['departamento'] ?? '';
+
+if ($usuario === '' || $departamento === '') {
+    echo "DATOS_INCOMPLETOS";
+    exit;
+}
+
+$resUser = mysqli_query($conexion, "SELECT id FROM usuarios WHERE usuario='$usuario'");
+if (!$resUser || mysqli_num_rows($resUser) === 0) {
+    echo "USUARIO_NO_EXISTE";
+    exit;
+}
+$usuario_id = mysqli_fetch_assoc($resUser)['id'];
+
+$resInv = mysqli_query($conexion, "SELECT id FROM inventarios WHERE usuario_id='$usuario_id' ORDER BY id DESC LIMIT 1");
+if (!$resInv || mysqli_num_rows($resInv) === 0) {
+    echo "OK|"; // No hay inventario aún, devolvemos vacío pero OK
+    exit;
+}
+$inventario_id = mysqli_fetch_assoc($resInv)['id'];
+
+$resProd = mysqli_query($conexion, "SELECT nombre, cantidad FROM inventario_productos WHERE inventario_id='$inventario_id' AND departamento='$departamento'");
+
+$salida = [];
+if ($resProd) {
+    while ($row = mysqli_fetch_assoc($resProd)) {
+        $salida[] = $row['nombre'] . ":" . $row['cantidad'];
+    }
+}
+
+echo "OK|" . implode(";", $salida);
+?>
+
+#################################################
+#################################################
+#################################################
+#################################################
+
+registrar.php
+
+<?php
+include "conexion.php";
+
+$usuario   = $_POST['usuario'];
+$password  = $_POST['password'];
+$nombres   = $_POST['nombres'];
+$apellidos = $_POST['apellidos'];
+$rol       = $_POST['rol'];
+
+// 1. Verificar si el usuario ya existe
+$consulta = $conexion->prepare("SELECT id FROM usuarios WHERE usuario = ?");
+$consulta->bind_param("s", $usuario);
+$consulta->execute();
+$consulta->store_result();
+
+if ($consulta->num_rows > 0) {
+    echo "ERROR_USUARIO_EXISTE";
+    exit;
+}
+
+// 2. Insertar si NO existe
+$insertar = $conexion->prepare(
+    "INSERT INTO usuarios (usuario, password, nombres, apellidos, rol)
+     VALUES (?, ?, ?, ?, ?)"
+);
+$insertar->bind_param("sssss", $usuario, $password, $nombres, $apellidos, $rol);
+
+if ($insertar->execute()) {
+    echo "USUARIO_REGISTRADO";
+} else {
+    echo "ERROR_REGISTRO";
+}
+?>
+
+#################################################
+#################################################
+#################################################
+#################################################
+
+login.php
+
+<?php
+include("conexion.php");
+
+$usuario = $_POST['usuario'];
+$password = $_POST['password'];
+
+$sql = "SELECT rol FROM usuarios WHERE usuario='$usuario' AND password='$password'";
+$resultado = mysqli_query($conexion, $sql);
+
+if(mysqli_num_rows($resultado) > 0){
+    $fila = mysqli_fetch_assoc($resultado);
+
+    echo "ok|" . trim($usuario) . "|" . trim($fila['rol']);
+
+} else {
+    echo "error";
+}
+?>
+
+
+
+

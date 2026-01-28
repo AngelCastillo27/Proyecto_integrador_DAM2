@@ -6,7 +6,6 @@
     android:layout_height="match_parent">
 
     <TextView
-
         android:id="@+id/tvTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,12 +16,10 @@
         android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
 
-    <!-- ScrollView solo para los productos -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingBottom="8dp">
+        android:layout_weight="1">
 
         <LinearLayout
             android:id="@+id/contenedorProductos"
@@ -31,21 +28,19 @@
             android:layout_height="wrap_content"/>
     </ScrollView>
 
-    <!-- Botones fijos abajo -->
     <Button
         android:id="@+id/btnAgregar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Agregar producto"
-        android:layout_marginTop="8dp"/>
+        android:text="Agregar producto"/>
 
     <Button
         android:id="@+id/btnGuardar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Guardar cambios"
-        android:textColor="#FFFFFF"
         android:backgroundTint="@color/design_default_color_primary_variant"
+        android:textColor="#FFFFFF"
         android:layout_marginTop="8dp"/>
 
     <Button
@@ -53,9 +48,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="REGRESAR"
-        android:textColor="#FFFFFF"
         android:backgroundTint="@color/design_default_color_error"
-        android:layout_gravity="start"
+        android:textColor="#FFFFFF"
         android:layout_marginTop="8dp"/>
 
 </LinearLayout>
