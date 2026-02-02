@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5"
+    android:padding="16dp">
 
-    <LinearLayout
-        android:id="@+id/contenedorReportes"
-        android:orientation="vertical"
-        android:padding="16dp"
+    <TextView
+        android:id="@+id/tvTituloReportes"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:text="HISTORIAL DE INVENTARIOS"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="#333333"
+        android:layout_marginBottom="16dp"/>
 
-</ScrollView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/contenedorReportes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- Aquí se añadirán los reportes dinámicamente -->
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnRetorno_ini_gener"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="REGRESAR"
+        android:backgroundTint="@color/design_default_color_error"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="8dp"/>
+</LinearLayout>

@@ -47,11 +47,8 @@
             android:name=".activities.inicio.SelectorRolActivity"
             android:exported="false" />
 
-
-
-
-
-
+        <activity android:name=".activities.departamentos.ReportesActivity"
+            android:exported="false" />
 
 
     </application>
