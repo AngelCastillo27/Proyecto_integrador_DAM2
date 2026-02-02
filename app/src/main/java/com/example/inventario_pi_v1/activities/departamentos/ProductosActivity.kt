@@ -14,14 +14,16 @@ class ProductosActivity : AppCompatActivity() {
     private lateinit var contenedor: LinearLayout
     private lateinit var usuario: String
     private lateinit var departamento: String
+    private lateinit var turno: String // ✅ Variable para almacenar el turno
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_productos)
 
-        // Recibimos usuario y departamento
+        // 1. Capturamos los datos del Intent, incluyendo el TURNO
         usuario = intent.getStringExtra("USUARIO") ?: ""
         departamento = intent.getStringExtra("DEPARTAMENTO") ?: ""
+        turno = intent.getStringExtra("TURNO") ?: "M" // ✅ Recibimos el turno (por defecto "M")
 
         findViewById<TextView>(R.id.tvTitulo).text = departamento
         contenedor = findViewById(R.id.contenedorProductos)
@@ -31,7 +33,7 @@ class ProductosActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnGuardar).setOnClickListener { guardarProductos() }
         findViewById<Button>(R.id.btnRetorno_depgen).setOnClickListener { finish() }
 
-        cargarProductos() // Cargar los productos previamente guardados
+        cargarProductos()
     }
 
     private fun agregarFila(nombre: String, cantidad: String) {
@@ -71,9 +73,11 @@ class ProductosActivity : AppCompatActivity() {
                 conexion.requestMethod = "POST"
                 conexion.doOutput = true
 
+                // ✅ También enviamos el turno al listar para filtrar correctamente si es necesario
                 val data =
                     "usuario=${URLEncoder.encode(usuario, "UTF-8")}" +
-                            "&departamento=${URLEncoder.encode(departamento, "UTF-8")}"
+                            "&departamento=${URLEncoder.encode(departamento, "UTF-8")}" +
+                            "&turno=${URLEncoder.encode(turno, "UTF-8")}"
 
                 conexion.outputStream.write(data.toByteArray())
                 val respuesta = conexion.inputStream.bufferedReader().readText().trim()
@@ -108,10 +112,9 @@ class ProductosActivity : AppCompatActivity() {
             val fila = contenedor.getChildAt(i) as LinearLayout
             val nombre = (fila.getChildAt(0) as EditText).text.toString().trim()
             val cantidad = (fila.getChildAt(1) as EditText).text.toString().trim()
-            
-            // Limpiamos caracteres que rompen el protocolo (comas y dos puntos)
+
             val nombreLimpio = nombre.replace(",", "").replace(":", "")
-            
+
             if (nombreLimpio.isNotEmpty() && cantidad.isNotEmpty()) {
                 productosList.add("$nombreLimpio:$cantidad")
             }
@@ -130,13 +133,14 @@ class ProductosActivity : AppCompatActivity() {
                 conexion.doOutput = true
                 conexion.connectTimeout = 5000
 
+                // ✅ 2. Aquí añadimos el turno a la cadena POST
                 val data = "usuario=${URLEncoder.encode(usuario, "UTF-8")}" +
                         "&departamento=${URLEncoder.encode(departamento, "UTF-8")}" +
+                        "&turno=${URLEncoder.encode(turno, "UTF-8")}" +
                         "&productos=${URLEncoder.encode(productosList.joinToString(","), "UTF-8")}"
 
                 conexion.outputStream.write(data.toByteArray())
-                
-                // LEER RESPUESTA DEL PHP
+
                 val respuesta = conexion.inputStream.bufferedReader().readText().trim()
 
                 runOnUiThread {

@@ -19,9 +19,11 @@ class DepartamentosActivity : AppCompatActivity() {
     private var usuarioNombre: String = "" // ⚠ Nuevo: nombre de usuario
 
     private fun abrirDepartamento(nombre: String) {
+        // Dentro de abrirDepartamento(nombre: String)
         val i = Intent(this, ProductosActivity::class.java)
-        i.putExtra("USUARIO", usuarioNombre) // ⚠ Pasamos el nombre de usuario
+        i.putExtra("USUARIO", usuarioNombre)
         i.putExtra("DEPARTAMENTO", nombre)
+        i.putExtra("TURNO", intent.getStringExtra("TURNO")) // ✅ Añade esta línea
         startActivity(i)
     }
 

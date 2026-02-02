@@ -26,7 +26,6 @@ class InicioGenericoActivity : AppCompatActivity() {
     private var usuarioId: Int = 0
     private lateinit var usuario: String
     private lateinit var rol: String
-    private var turno: String = "M" 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +45,6 @@ class InicioGenericoActivity : AppCompatActivity() {
         tvBienvenida.text = "¡Hola, $usuario!"
         tvRol.text = "Sesión iniciada como: $rol"
 
-        // SOLO ADMIN
         if (rol.uppercase() == "ADMIN") {
             btnAdminRegistro.visibility = View.VISIBLE
             btnAdminRegistro.setOnClickListener {
@@ -57,10 +55,7 @@ class InicioGenericoActivity : AppCompatActivity() {
         }
 
         btnGenerarInventario.setOnClickListener {
-            val i = Intent(this, DepartamentosActivity::class.java)
-            i.putExtra("USUARIO_ID", usuarioId)
-            i.putExtra("USUARIO", usuario) // ✅ CORRECCIÓN: Ahora pasamos el nombre del usuario
-            startActivity(i)
+            mostrarSeleccionTurno()
         }
 
         btnFinalizarInventario.setOnClickListener {
@@ -70,6 +65,23 @@ class InicioGenericoActivity : AppCompatActivity() {
         btnReturn.setOnClickListener {
             finish()
         }
+    }
+
+    private fun mostrarSeleccionTurno() {
+        val turnos = arrayOf("Mañana (M)", "Tarde (T)", "Noche (N)")
+        val codigos = arrayOf("M", "T", "N")
+
+        AlertDialog.Builder(this)
+            .setTitle("Selecciona el turno")
+            .setItems(turnos) { _, which ->
+                val turnoSeleccionado = codigos[which]
+                val i = Intent(this, DepartamentosActivity::class.java)
+                i.putExtra("USUARIO_ID", usuarioId)
+                i.putExtra("USUARIO", usuario)
+                i.putExtra("TURNO", turnoSeleccionado) // ✅ Pasamos el turno elegido
+                startActivity(i)
+            }
+            .show()
     }
 
     private fun confirmarFinalizarInventario() {
@@ -87,11 +99,10 @@ class InicioGenericoActivity : AppCompatActivity() {
         val url = "http://10.0.2.2/inventario/finalizar_inventario.php"
 
         val request = object : StringRequest(
-            Request.Method.POST, url,
+            Method.POST, url,
             { response ->
                 if (response.contains("INVENTARIO_FINALIZADO_CON_EXITO")) {
                     Toast.makeText(this, "✅ Inventario guardado y cerrado", Toast.LENGTH_LONG).show()
-                    // Opcional: Cerrar la actividad para que el usuario tenga que entrar de nuevo
                     finish()
                 } else {
                     Toast.makeText(this, "Aviso: $response", Toast.LENGTH_LONG).show()
@@ -107,5 +118,4 @@ class InicioGenericoActivity : AppCompatActivity() {
         }
         Volley.newRequestQueue(this).add(request)
     }
-
 }
