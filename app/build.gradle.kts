@@ -46,5 +46,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("com.google.ai.client.generativeai:generativeai:0.7.0")
     implementation("com.android.volley:volley:1.2.1")
 }

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 
     <application
@@ -50,6 +50,9 @@
         <activity android:name=".activities.departamentos.ReportesActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".activities.reportes.AnalisisIAActivity"
+            android:exported="false" />
 
     </application>
 

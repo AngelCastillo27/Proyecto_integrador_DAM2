@@ -1,13 +1,16 @@
 package com.example.inventario_pi_v1.activities.departamentos
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.inventario_pi_v1.R
+import com.example.inventario_pi_v1.activities.reportes.AnalisisIAActivity // Asegúrate de que este import sea correcto
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
@@ -28,11 +31,38 @@ class ReportesActivity : AppCompatActivity() {
         contenedor = findViewById(R.id.contenedorReportes)
         findViewById<Button>(R.id.btnRetorno_ini_gener).setOnClickListener { finish() }
 
+        // 1. Cargamos la lista de reportes
         cargarReportes()
+
+        // 2. Agregamos el botón de IA (solo si es ADMIN)
+        configurarBotonIA()
+    }
+
+    private fun configurarBotonIA() {
+        if (rolActual.uppercase() == "ADMIN") {
+            val btnAI = Button(this)
+            btnAI.text = "📊 ANALIZAR TENDENCIAS CON IA"
+            btnAI.setBackgroundColor(Color.parseColor("#1A237E"))
+            btnAI.setTextColor(Color.WHITE)
+
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.setMargins(0, 0, 0, 30)
+            btnAI.layoutParams = params
+
+            btnAI.setOnClickListener {
+                val intent = Intent(this, AnalisisIAActivity::class.java)
+                startActivity(intent)
+            }
+
+            // Lo añadimos al principio del contenedor (índice 0)
+            contenedor.addView(btnAI, 0)
+        }
     }
 
     private fun cargarReportes() {
-        contenedor.removeAllViews()
         Thread {
             try {
                 val url = URL("http://10.0.2.2/inventario/obtener_reportes.php")
@@ -40,14 +70,25 @@ class ReportesActivity : AppCompatActivity() {
                 conexion.requestMethod = "POST"
                 conexion.doOutput = true
 
-
-
                 val data = "usuario=${URLEncoder.encode(usuarioActual, "UTF-8")}&rol=${URLEncoder.encode(rolActual, "UTF-8")}"
                 conexion.outputStream.write(data.toByteArray())
 
                 val respuesta = conexion.inputStream.bufferedReader().readText().trim()
 
                 runOnUiThread {
+                    // Al recargar, guardamos el botón de IA si existe para no borrarlo
+                    val vistaIA = if (rolActual.uppercase() == "ADMIN") contenedor.getChildAt(0) else null
+
+                    contenedor.removeAllViews()
+
+                    // Re-insertamos el botón de IA si existía
+                    if (vistaIA is Button) {
+                        contenedor.addView(vistaIA)
+                    } else if (rolActual.uppercase() == "ADMIN") {
+                        // Si por alguna razón se perdió, lo volvemos a configurar
+                        configurarBotonIA()
+                    }
+
                     if (respuesta.isNotEmpty() && !respuesta.startsWith("Error")) {
                         val filas = respuesta.split(";")
                         for (fila in filas) {
@@ -67,49 +108,79 @@ class ReportesActivity : AppCompatActivity() {
     }
 
     private fun agregarItemLista(idInv: String, user: String, turno: String, fecha: String) {
-        val layoutItem = LinearLayout(this)
-        layoutItem.orientation = LinearLayout.HORIZONTAL
-        layoutItem.setPadding(30, 30, 30, 30)
-        
-        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        params.setMargins(0, 0, 0, 20)
-        layoutItem.layoutParams = params
-        layoutItem.setBackgroundResource(android.R.drawable.dialog_holo_light_frame)
-        layoutItem.gravity = Gravity.CENTER_VERTICAL
+        val itemPrincipal = LinearLayout(this)
+        itemPrincipal.orientation = LinearLayout.VERTICAL
+        val paramsItem = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        paramsItem.setMargins(0, 0, 0, 25)
+        itemPrincipal.layoutParams = paramsItem
+        itemPrincipal.setBackgroundResource(android.R.drawable.dialog_holo_light_frame)
 
-        // Texto informativo: USUARIO - TURNO - DIA
+        val cabecera = LinearLayout(this)
+        cabecera.orientation = LinearLayout.HORIZONTAL
+        cabecera.setPadding(35, 35, 35, 35)
+        cabecera.gravity = Gravity.CENTER_VERTICAL
+
         val tvInfo = TextView(this)
         val fechaCorta = if(fecha.length > 10) fecha.substring(0, 10) else fecha
         tvInfo.text = "$user - $turno - $fechaCorta"
-        tvInfo.textSize = 16f // Corregido: 16f en lugar de 16sp
+        tvInfo.textSize = 16f
         tvInfo.typeface = Typeface.DEFAULT_BOLD
         tvInfo.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
         tvInfo.setTextColor(Color.BLACK)
 
-        layoutItem.addView(tvInfo)
+        cabecera.addView(tvInfo)
 
-        // Botón Ver (Para todos)
-        val btnVer = ImageButton(this)
-        btnVer.setImageResource(android.R.drawable.ic_menu_view)
-        btnVer.setBackgroundColor(Color.TRANSPARENT)
-        btnVer.setOnClickListener {
-            Toast.makeText(this, "Detalles del inventario $idInv", Toast.LENGTH_SHORT).show()
-            // Aquí podrías implementar una vista de detalle más adelante
-        }
-        layoutItem.addView(btnVer)
-
-        // Botón Eliminar (Solo para ADMIN)
         if (rolActual.uppercase() == "ADMIN") {
             val btnEliminar = ImageButton(this)
             btnEliminar.setImageResource(android.R.drawable.ic_menu_delete)
             btnEliminar.setBackgroundColor(Color.TRANSPARENT)
-            btnEliminar.setOnClickListener {
-                confirmarEliminacion(idInv)
-            }
-            layoutItem.addView(btnEliminar)
+            btnEliminar.setOnClickListener { confirmarEliminacion(idInv) }
+            cabecera.addView(btnEliminar)
         }
 
-        contenedor.addView(layoutItem)
+        val tvDetalles = TextView(this)
+        tvDetalles.setPadding(50, 0, 50, 35)
+        tvDetalles.visibility = View.GONE
+        tvDetalles.setTextColor(Color.DKGRAY)
+        tvDetalles.textSize = 14f
+
+        cabecera.setOnClickListener {
+            if (tvDetalles.visibility == View.GONE) {
+                if (tvDetalles.text.isEmpty()) {
+                    cargarDetallesProductos(idInv, tvDetalles)
+                }
+                tvDetalles.visibility = View.VISIBLE
+                itemPrincipal.setBackgroundColor(Color.parseColor("#E3F2FD"))
+            } else {
+                tvDetalles.visibility = View.GONE
+                itemPrincipal.setBackgroundColor(Color.TRANSPARENT)
+            }
+        }
+
+        itemPrincipal.addView(cabecera)
+        itemPrincipal.addView(tvDetalles)
+        contenedor.addView(itemPrincipal)
+    }
+
+    private fun cargarDetallesProductos(idInv: String, tvDetalles: TextView) {
+        Thread {
+            try {
+                val url = URL("http://10.0.2.2/inventario/obtener_detalles_inventario.php")
+                val conexion = url.openConnection() as HttpURLConnection
+                conexion.requestMethod = "POST"
+                conexion.doOutput = true
+                val data = "inventario_id=$idInv"
+                conexion.outputStream.write(data.toByteArray())
+
+                val respuesta = conexion.inputStream.bufferedReader().readText().trim()
+
+                runOnUiThread {
+                    tvDetalles.text = if (respuesta.isEmpty()) "Sin productos registrados" else "PRODUCTOS:\n$respuesta"
+                }
+            } catch (e: Exception) {
+                runOnUiThread { tvDetalles.text = "Error al cargar detalles" }
+            }
+        }.start()
     }
 
     private fun confirmarEliminacion(idInv: String) {
@@ -134,8 +205,8 @@ class ReportesActivity : AppCompatActivity() {
 
                 runOnUiThread {
                     if (respuesta == "OK") {
-                        Toast.makeText(this, "Inventario eliminado correctamente", Toast.LENGTH_SHORT).show()
-                        cargarReportes() // Recargar la lista automáticamente
+                        Toast.makeText(this, "Inventario eliminado", Toast.LENGTH_SHORT).show()
+                        cargarReportes()
                     } else {
                         Toast.makeText(this, "Error: $respuesta", Toast.LENGTH_SHORT).show()
                     }
