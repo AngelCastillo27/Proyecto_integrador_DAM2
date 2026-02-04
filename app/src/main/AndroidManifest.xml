@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 
@@ -50,9 +50,10 @@
         <activity android:name=".activities.departamentos.ReportesActivity"
             android:exported="false" />
 
-        <activity
-            android:name=".activities.reportes.AnalisisIAActivity"
+        <activity android:name=".activities.departamentos.AnalisisIAActivity"
             android:exported="false" />
+
+
 
     </application>
 

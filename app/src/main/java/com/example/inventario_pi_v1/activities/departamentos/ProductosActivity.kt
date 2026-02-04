@@ -2,6 +2,7 @@ package com.example.inventario_pi_v1.activities.departamentos
 
 import android.os.Bundle
 import android.text.InputType
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.inventario_pi_v1.R
@@ -14,29 +15,25 @@ class ProductosActivity : AppCompatActivity() {
     private lateinit var contenedor: LinearLayout
     private lateinit var usuario: String
     private lateinit var departamento: String
-    private lateinit var turno: String // ✅ Variable para almacenar el turno
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_productos)
 
-        // 1. Capturamos los datos del Intent, incluyendo el TURNO
         usuario = intent.getStringExtra("USUARIO") ?: ""
         departamento = intent.getStringExtra("DEPARTAMENTO") ?: ""
-        turno = intent.getStringExtra("TURNO") ?: "M" // ✅ Recibimos el turno (por defecto "M")
 
         findViewById<TextView>(R.id.tvTitulo).text = departamento
         contenedor = findViewById(R.id.contenedorProductos)
 
-        // Botones
-        findViewById<Button>(R.id.btnAgregar).setOnClickListener { agregarFila("", "") }
+        findViewById<Button>(R.id.btnAgregar).setOnClickListener { agregarFila("", "", false) }
         findViewById<Button>(R.id.btnGuardar).setOnClickListener { guardarProductos() }
         findViewById<Button>(R.id.btnRetorno_depgen).setOnClickListener { finish() }
 
         cargarProductos()
     }
 
-    private fun agregarFila(nombre: String, cantidad: String) {
+    private fun agregarFila(nombre: String, cantidad: String, esEstatico: Boolean) {
         val fila = LinearLayout(this)
         fila.orientation = LinearLayout.HORIZONTAL
         fila.setPadding(8, 8, 8, 8)
@@ -44,25 +41,29 @@ class ProductosActivity : AppCompatActivity() {
         val etNombre = EditText(this)
         etNombre.hint = "Producto"
         etNombre.setText(nombre)
-        etNombre.layoutParams =
-            LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 2f)
+        etNombre.isEnabled = !esEstatico // Si es estático, no se puede cambiar el nombre
+        etNombre.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 2f)
 
         val etCantidad = EditText(this)
         etCantidad.hint = "Cant."
         etCantidad.inputType = InputType.TYPE_CLASS_NUMBER
-        etCantidad.setText(cantidad)
-        etCantidad.layoutParams =
-            LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        etCantidad.setText(if (cantidad == "0") "" else cantidad)
+        etCantidad.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
 
         val btnEliminar = Button(this)
         btnEliminar.text = "❌"
-        btnEliminar.setOnClickListener { contenedor.removeView(fila) }
+        if (esEstatico) {
+            btnEliminar.visibility = View.INVISIBLE // No se puede borrar si es estático
+        } else {
+            btnEliminar.setOnClickListener { contenedor.removeView(fila) }
+        }
 
         fila.addView(etNombre)
         fila.addView(etCantidad)
         fila.addView(btnEliminar)
 
-        contenedor.addView(fila, 0)
+        // Si es estático lo ponemos al final, si es nuevo al principio
+        if (esEstatico) contenedor.addView(fila) else contenedor.addView(fila, 0)
     }
 
     private fun cargarProductos() {
@@ -72,13 +73,7 @@ class ProductosActivity : AppCompatActivity() {
                 val conexion = url.openConnection() as HttpURLConnection
                 conexion.requestMethod = "POST"
                 conexion.doOutput = true
-
-                // ✅ También enviamos el turno al listar para filtrar correctamente si es necesario
-                val data =
-                    "usuario=${URLEncoder.encode(usuario, "UTF-8")}" +
-                            "&departamento=${URLEncoder.encode(departamento, "UTF-8")}" +
-                            "&turno=${URLEncoder.encode(turno, "UTF-8")}"
-
+                val data = "usuario=${URLEncoder.encode(usuario, "UTF-8")}&departamento=${URLEncoder.encode(departamento, "UTF-8")}"
                 conexion.outputStream.write(data.toByteArray())
                 val respuesta = conexion.inputStream.bufferedReader().readText().trim()
 
@@ -89,40 +84,27 @@ class ProductosActivity : AppCompatActivity() {
                             val filas = datos.split(";")
                             for (f in filas) {
                                 val partes = f.split(":")
-                                if (partes.size == 2) agregarFila(partes[0], partes[1])
+                                if (partes.size >= 3) {
+                                    agregarFila(partes[0], partes[1], partes[2] == "1")
+                                }
                             }
                         }
-                    } else if (respuesta != "OK|") {
-                        Toast.makeText(this, "Respuesta: $respuesta", Toast.LENGTH_SHORT).show()
                     }
                 }
-
             } catch (e: Exception) {
-                runOnUiThread {
-                    Toast.makeText(this, "Error al cargar: ${e.message}", Toast.LENGTH_LONG).show()
-                }
+                e.printStackTrace()
             }
         }.start()
     }
 
     private fun guardarProductos() {
         val productosList = ArrayList<String>()
-
         for (i in 0 until contenedor.childCount) {
             val fila = contenedor.getChildAt(i) as LinearLayout
             val nombre = (fila.getChildAt(0) as EditText).text.toString().trim()
             val cantidad = (fila.getChildAt(1) as EditText).text.toString().trim()
-
-            val nombreLimpio = nombre.replace(",", "").replace(":", "")
-
-            if (nombreLimpio.isNotEmpty() && cantidad.isNotEmpty()) {
-                productosList.add("$nombreLimpio:$cantidad")
-            }
-        }
-
-        if (productosList.isEmpty()) {
-            Toast.makeText(this, "No hay productos válidos para guardar", Toast.LENGTH_SHORT).show()
-            return
+            val cantFinal = if (cantidad.isEmpty()) "0" else cantidad
+            if (nombre.isNotEmpty()) productosList.add("$nombre:$cantFinal")
         }
 
         Thread {
@@ -131,30 +113,15 @@ class ProductosActivity : AppCompatActivity() {
                 val conexion = url.openConnection() as HttpURLConnection
                 conexion.requestMethod = "POST"
                 conexion.doOutput = true
-                conexion.connectTimeout = 5000
-
-                // ✅ 2. Aquí añadimos el turno a la cadena POST
                 val data = "usuario=${URLEncoder.encode(usuario, "UTF-8")}" +
                         "&departamento=${URLEncoder.encode(departamento, "UTF-8")}" +
-                        "&turno=${URLEncoder.encode(turno, "UTF-8")}" +
                         "&productos=${URLEncoder.encode(productosList.joinToString(","), "UTF-8")}"
-
                 conexion.outputStream.write(data.toByteArray())
-
                 val respuesta = conexion.inputStream.bufferedReader().readText().trim()
-
                 runOnUiThread {
-                    if (respuesta == "OK") {
-                        Toast.makeText(this, "¡Guardado en Base de Datos!", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this, "Fallo: $respuesta", Toast.LENGTH_LONG).show()
-                    }
+                    if (respuesta == "OK") Toast.makeText(this, "Guardado correctamente", Toast.LENGTH_SHORT).show()
                 }
-            } catch (e: Exception) {
-                runOnUiThread {
-                    Toast.makeText(this, "Error de red: ${e.message}", Toast.LENGTH_LONG).show()
-                }
-            }
+            } catch (e: Exception) { e.printStackTrace() }
         }.start()
     }
 }

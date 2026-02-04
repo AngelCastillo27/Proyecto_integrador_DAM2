@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.inventario_pi_v1.R
-import com.example.inventario_pi_v1.activities.reportes.AnalisisIAActivity // Asegúrate de que este import sea correcto
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
