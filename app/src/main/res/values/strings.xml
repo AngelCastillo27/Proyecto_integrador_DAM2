@@ -1,3 +1,42 @@
 <resources>
-    <string name="app_name">Inventario_PI_v1</string>
+    <string name="app_name">Inventario</string>
+    
+    <!-- Selector de Rol -->
+    <string name="selecciona_rol">SELECCIONA TU ROL</string>
+    <string name="administrador">ADMINISTRADOR</string>
+    <string name="operaciones">OPERACIONES</string>
+    <string name="regresar">REGRESAR</string>
+
+    <!-- Login -->
+    <string name="iniciar_sesion">INICIAR SESIÓN</string>
+    <string name="usuario">Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="ingresar">INGRESAR</string>
+
+    <!-- Inicio Genérico -->
+    <string name="hola">Hola</string>
+    <string name="sesion_como">Sesión iniciada como</string>
+    <string name="admin_registro">REGISTRO DE USUARIOS</string>
+    <string name="generar_inventario">GENERAR INVENTARIO</string>
+    <string name="finalizar_inventario">FINALIZAR INVENTARIO</string>
+    <string name="mensaje_finalizar">Esto guardará el inventario y cerrará el actual. ¿Deseas continuar?</string>
+    <string name="si">SÍ</string>
+    <string name="no">NO</string>
+    <string name="inventario_cerrado">Inventario guardado y cerrado correctamente</string>
+
+    <!-- Turnos -->
+    <string name="selecciona_turno">Selecciona el turno</string>
+    <string name="manana">Mañana (M)</string>
+    <string name="tarde">Tarde (T)</string>
+    <string name="noche">Noche (N)</string>
+
+    <!-- Productos y Departamentos -->
+    <string name="agregar">AGREGAR</string>
+    <string name="guardar">GUARDAR CAMBIOS</string>
+    <string name="error_conexion">Error de conexión</string>
+    <string name="guardado_ok">¡Guardado correctamente!</string>
+
+    <!-- Reportes -->
+    <string name="historial_inventarios">HISTORIAL DE INVENTARIOS</string>
+    <string name="eliminar_inv">¿Estás seguro de eliminar permanentemente este inventario?</string>
 </resources>

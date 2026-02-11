@@ -11,7 +11,7 @@
         android:id="@+id/tvBienvenidaGenerica"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="BIENVENIDO"
+        android:text="@string/hola"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#1976D2"
@@ -21,7 +21,7 @@
         android:id="@+id/tvRolActual"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rol: ..."
+        android:text="@string/sesion_como"
         android:textSize="16sp"
         android:layout_marginBottom="24dp"/>
 
@@ -29,17 +29,16 @@
         android:id="@+id/btnGenerarInventario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="GENERAR INVENTARIO"
+        android:text="@string/generar_inventario"
         android:backgroundTint="#4CAF50"
         android:textColor="#FFFFFF"
         android:layout_marginBottom="12dp"/>
 
-    <!-- 🔴 BOTÓN FINALIZAR INVENTARIO -->
     <Button
         android:id="@+id/btnFinalizarInventario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="FINALIZAR INVENTARIO"
+        android:text="@string/finalizar_inventario"
         android:backgroundTint="#F44336"
         android:textColor="#FFFFFF"
         android:layout_marginBottom="24dp"/>
@@ -48,7 +47,7 @@
         android:id="@+id/btnVerReportes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="VER REPORTES"
+        android:text="@string/historial_inventarios"
         android:backgroundTint="#1976D2"
         android:textColor="#FFFFFF"
         android:layout_marginBottom="24dp"/>
@@ -57,7 +56,7 @@
         android:id="@+id/btnAdminRegistro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="REGISTRAR NUEVO USUARIO"
+        android:text="@string/admin_registro"
         android:backgroundTint="#FF9800"
         android:textColor="#FFFFFF"
         android:visibility="gone"/>
@@ -66,9 +65,59 @@
         android:id="@+id/btnReturn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="REGRESAR"
+        android:text="@string/regresar"
         android:backgroundTint="@color/design_default_color_error"
         android:textColor="#FFFFFF"
         android:layout_marginTop="16dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp">
+
+        <ImageButton
+            android:id="@+id/btnEs"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/es"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:layout_marginEnd="20dp"/>
+
+        <ImageButton
+            android:id="@+id/btnEn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/en"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"/>
+
+        <ImageButton
+            android:id="@+id/btnZh"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/zh"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"/>
+
+        <ImageButton
+            android:id="@+id/btnIt"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/it"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"/>
+
+        <ImageButton
+            android:id="@+id/btnFr"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/fr"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"/>
+    </LinearLayout>
 
 </LinearLayout>

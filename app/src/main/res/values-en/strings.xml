@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Inventory</string>
+    
+    <!-- Role Selector -->
+    <string name="selecciona_rol">SELECT YOUR ROLE</string>
+    <string name="administrador">ADMINISTRATOR</string>
+    <string name="operaciones">OPERATIONS</string>
+    <string name="regresar">BACK</string>
+
+    <!-- Login -->
+    <string name="iniciar_sesion">LOGIN</string>
+    <string name="usuario">Username</string>
+    <string name="password">Password</string>
+    <string name="ingresar">ENTER</string>
+
+    <!-- Generic Home -->
+    <string name="hola">Hello</string>
+    <string name="sesion_como">Logged in as</string>
+    <string name="admin_registro">USER REGISTRATION</string>
+    <string name="generar_inventario">GENERATE INVENTORY</string>
+    <string name="finalizar_inventario">FINISH INVENTORY</string>
+    <string name="mensaje_finalizar">This will save and close the current inventory. Do you wish to continue?</string>
+    <string name="si">YES</string>
+    <string name="no">NO</string>
+    <string name="inventario_cerrado">Inventory saved and closed successfully</string>
+
+    <!-- Shifts -->
+    <string name="selecciona_turno">Select shift</string>
+    <string name="manana">Morning (M)</string>
+    <string name="tarde">Afternoon (T)</string>
+    <string name="noche">Night (N)</string>
+
+    <!-- Products & Departments -->
+    <string name="agregar">ADD</string>
+    <string name="guardar">SAVE CHANGES</string>
+    <string name="error_conexion">Connection error</string>
+    <string name="guardado_ok">Saved successfully!</string>
+
+    <!-- Reports -->
+    <string name="historial_inventarios">INVENTORY HISTORY</string>
+    <string name="eliminar_inv">Are you sure you want to permanently delete this inventory?</string>
+</resources>

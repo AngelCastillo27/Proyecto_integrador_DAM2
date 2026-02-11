@@ -26,7 +26,7 @@ class ProductosActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvTitulo).text = departamento
         contenedor = findViewById(R.id.contenedorProductos)
 
-        findViewById<Button>(R.id.btnAgregar).setOnClickListener { agregarFila("", "", false) }
+        findViewById<Button>(R.id.btnAgregar).setOnClickListener { agregarFila("", "0", false) }
         findViewById<Button>(R.id.btnGuardar).setOnClickListener { guardarProductos() }
         findViewById<Button>(R.id.btnRetorno_depgen).setOnClickListener { finish() }
 
@@ -47,7 +47,10 @@ class ProductosActivity : AppCompatActivity() {
         val etCantidad = EditText(this)
         etCantidad.hint = "Cant."
         etCantidad.inputType = InputType.TYPE_CLASS_NUMBER
-        etCantidad.setText(if (cantidad == "0") "" else cantidad)
+        
+        // CORRECCIÓN: Ahora mostramos el valor real (0) en lugar de un campo vacío
+        etCantidad.setText(if (cantidad.isEmpty()) "0" else cantidad)
+        
         etCantidad.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
 
         val btnEliminar = Button(this)

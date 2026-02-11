@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Inventario</string>
+
+    <!-- Selettore di ruolo -->
+    <string name="selecciona_rol">SELEZIONA IL TUO RUOLO</string>
+    <string name="administrador">AMMINISTRATORE</string>
+    <string name="operaciones">OPERAZIONI</string>
+    <string name="regresar">INDIETRO</string>
+
+    <!-- Login -->
+    <string name="iniciar_sesion">ACCESSO</string>
+    <string name="usuario">Nome utente</string>
+    <string name="password">Password</string>
+    <string name="ingresar">ENTRA</string>
+
+
+    <!-- Home generica -->
+    <string name="hola">Ciao</string>
+    <string name="sesion_como">Accesso come</string>
+    <string name="admin_registro">REGISTRAZIONE UTENTI</string>
+    <string name="generar_inventario">GENERA INVENTARIO</string>
+    <string name="finalizar_inventario">TERMINA INVENTARIO</string>
+    <string name="mensaje_finalizar">Questo salverà l’inventario e chiuderà quello attuale. Vuoi continuare?</string>
+    <string name="si">SÌ</string>
+    <string name="no">NO</string>
+    <string name="inventario_cerrado">Inventario salvato e chiuso correttamente</string>
+
+    <!-- Turni -->
+    <string name="selecciona_turno">Seleziona turno</string>
+    <string name="manana">Mattina (M)</string>
+    <string name="tarde">Pomeriggio (P)</string>
+    <string name="noche">Notte (N)</string>
+
+    <!-- Prodotti e reparti -->
+    <string name="agregar">AGGIUNGI</string>
+    <string name="guardar">SALVA MODIFICHE</string>
+    <string name="error_conexion">Errore di connessione</string>
+    <string name="guardado_ok">Salvato correttamente!</string>
+
+    <!-- Report -->
+    <string name="historial_inventarios">STORICO INVENTARI</string>
+    <string name="eliminar_inv">Sei sicuro di voler eliminare definitivamente questo inventario?</string>
+</resources>

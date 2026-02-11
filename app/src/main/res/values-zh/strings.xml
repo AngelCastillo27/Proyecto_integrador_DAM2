@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">库存</string>
+
+    <!-- 角色选择 -->
+    <string name="selecciona_rol">选择你的角色</string>
+    <string name="administrador">管理员</string>
+    <string name="operaciones">操作</string>
+    <string name="regresar">返回</string>
+
+    <!-- Login -->
+    <string name="iniciar_sesion">登录</string>
+    <string name="usuario">用户名</string>
+    <string name="password">密码</string>
+    <string name="ingresar">进入</string>
+
+
+    <!-- 通用首页 -->
+    <string name="hola">你好</string>
+    <string name="sesion_como">登录身份</string>
+    <string name="admin_registro">用户注册</string>
+    <string name="generar_inventario">生成库存</string>
+    <string name="finalizar_inventario">完成库存</string>
+    <string name="mensaje_finalizar">这将保存库存并关闭当前库存。是否继续？</string>
+    <string name="si">是</string>
+    <string name="no">否</string>
+    <string name="inventario_cerrado">库存已成功保存并关闭</string>
+
+    <!-- 班次 -->
+    <string name="selecciona_turno">选择班次</string>
+    <string name="manana">早班 (M)</string>
+    <string name="tarde">晚班 (T)</string>
+    <string name="noche">夜班 (N)</string>
+
+    <!-- 产品和部门 -->
+    <string name="agregar">添加</string>
+    <string name="guardar">保存更改</string>
+    <string name="error_conexion">连接错误</string>
+    <string name="guardado_ok">保存成功！</string>
+
+    <!-- 报告 -->
+    <string name="historial_inventarios">库存历史</string>
+    <string name="eliminar_inv">你确定要永久删除此库存吗？</string>
+</resources>

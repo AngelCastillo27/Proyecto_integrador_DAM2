@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
-            android:text="SELECCIONA TU ROL"
+            android:text="@string/selecciona_rol"
             android:textColor="#1976D2"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:backgroundTint="#1976D2"
-            android:text="ADMINISTRADOR"
+            android:text="@string/administrador"
             android:textColor="#FFFFFF" />
 
         <Button
@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#1976D2"
-            android:text="OPERACIONES"
+            android:text="@string/operaciones"
             android:textColor="#FFFFFF" />
 
         <Button
@@ -50,8 +50,58 @@
             android:layout_gravity="top|start"
             android:layout_margin="16dp"
             android:backgroundTint="@color/design_default_color_error"
-            android:text="REGRESAR"
+            android:text="@string/regresar"
             android:textColor="#FFFFFF" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp">
+
+        <ImageButton
+            android:id="@+id/btnEs"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/es"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:layout_marginEnd="20dp"/>
+
+        <ImageButton
+            android:id="@+id/btnEn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/en"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"/>
+
+        <ImageButton
+            android:id="@+id/btnZh"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/zh"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"/>
+
+        <ImageButton
+            android:id="@+id/btnIt"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/it"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"/>
+
+        <ImageButton
+            android:id="@+id/btnFr"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/fr"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"/>
     </LinearLayout>
 
 </FrameLayout>

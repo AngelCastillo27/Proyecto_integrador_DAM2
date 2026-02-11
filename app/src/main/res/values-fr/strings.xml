@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Inventaire</string>
+
+    <!-- Sélecteur de rôle -->
+    <string name="selecciona_rol">SÉLECTIONNEZ VOTRE RÔLE</string>
+    <string name="administrador">ADMINISTRATEUR</string>
+    <string name="operaciones">OPÉRATIONS</string>
+    <string name="regresar">RETOUR</string>
+
+    <!-- Login -->
+    <string name="iniciar_sesion">CONNEXION</string>
+    <string name="usuario">Nom d’utilisateur</string>
+    <string name="password">Mot de passe</string>
+    <string name="ingresar">ENTRER</string>
+
+
+    <!-- Accueil générique -->
+    <string name="hola">Bonjour</string>
+    <string name="sesion_como">Connecté en tant que</string>
+    <string name="admin_registro">ENREGISTREMENT DES UTILISATEURS</string>
+    <string name="generar_inventario">GÉNÉRER L’INVENTAIRE</string>
+    <string name="finalizar_inventario">TERMINER L’INVENTAIRE</string>
+    <string name="mensaje_finalizar">Cela enregistrera l’inventaire et fermera l’actuel. Voulez-vous continuer ?</string>
+    <string name="si">OUI</string>
+    <string name="no">NON</string>
+    <string name="inventario_cerrado">Inventaire enregistré et fermé avec succès</string>
+
+    <!-- Quarts -->
+    <string name="selecciona_turno">Sélectionnez le quart</string>
+    <string name="manana">Matin (M)</string>
+    <string name="tarde">Après-midi (A)</string>
+    <string name="noche">Nuit (N)</string>
+
+    <!-- Produits et départements -->
+    <string name="agregar">AJOUTER</string>
+    <string name="guardar">ENREGISTRER LES MODIFICATIONS</string>
+    <string name="error_conexion">Erreur de connexion</string>
+    <string name="guardado_ok">Enregistré avec succès !</string>
+
+    <!-- Rapports -->
+    <string name="historial_inventarios">HISTORIQUE DES INVENTAIRES</string>
+    <string name="eliminar_inv">Êtes-vous sûr de vouloir supprimer définitivement cet inventaire ?</string>
+</resources>
