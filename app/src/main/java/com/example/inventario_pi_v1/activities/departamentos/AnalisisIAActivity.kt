@@ -44,7 +44,7 @@ class AnalisisIAActivity : AppCompatActivity() {
 
         // Llamamos al PHP que se encargará de hablar con LM Studio
         val url = "http://10.0.2.2/inventario/analizar_inventarios_ia.php"
-
+        //CORREGIDO
 
         val request = object : StringRequest(
             Request.Method.POST,
