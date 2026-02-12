@@ -27,40 +27,55 @@ class AnalisisIAActivity : AppCompatActivity() {
             finish()
         }
 
-        // Llamada directa al backend con IA
-        llamarAnalisisIA()
+        llamarServidorLocalIA()
     }
 
-    private fun llamarAnalisisIA() {
+    private fun llamarServidorLocalIA() {
         progress.visibility = View.VISIBLE
-        tvResultado.text = "La IA está analizando los inventarios..."
+        tvResultado.text = "Contactando con la IA local..."
 
+        val idsSeleccionadas = intent.getStringExtra("IDS_SELECCIONADAS") ?: ""
+
+        if (idsSeleccionadas.isEmpty()) {
+            progress.visibility = View.GONE
+            tvResultado.text = "No se seleccionaron inventarios para analizar."
+            return
+        }
+
+        // Llamamos al PHP que se encargará de hablar con LM Studio
         val url = "http://10.0.2.2/inventario/analizar_inventarios_ia.php"
 
-        val request = StringRequest(
-            Request.Method.GET,
+
+        val request = object : StringRequest(
+            Request.Method.POST,
             url,
             { response ->
                 progress.visibility = View.GONE
-                tvResultado.text = if (response.isNotEmpty()) {
-                    response
+                if (response.isNotEmpty() && !response.startsWith("Error")) {
+                    // Mostramos directamente lo que nos dice nuestra IA local
+                    tvResultado.text = response.trim()
                 } else {
-                    "La IA no devolvió resultados."
+                    tvResultado.text = "No se pudo generar el análisis. Respuesta del servidor: \n$response"
                 }
             },
             {
                 progress.visibility = View.GONE
-                tvResultado.text = "Error al conectar con el servidor."
+                tvResultado.text = "Error crítico al conectar con el servidor local (XAMPP)."
             }
-        )
+        ) {
+            override fun getParams(): MutableMap<String, String> {
+                // Enviamos los IDs de los inventarios seleccionados al PHP
+                return hashMapOf("ids" to idsSeleccionadas)
+            }
+        }
+
+        // Añadimos más tiempo de espera, ya que la IA local puede tardar
         request.retryPolicy = com.android.volley.DefaultRetryPolicy(
-            //6 minutos
-            360000,
-            0,
+            120000, // 2 minutos
+            com.android.volley.DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
             com.android.volley.DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         )
 
         Volley.newRequestQueue(this).add(request)
-
     }
 }

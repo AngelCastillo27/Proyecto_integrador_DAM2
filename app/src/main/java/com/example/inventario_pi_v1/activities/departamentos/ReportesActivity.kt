@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.inventario_pi_v1.R
+
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
@@ -19,6 +20,7 @@ class ReportesActivity : AppCompatActivity() {
     private lateinit var contenedor: LinearLayout
     private lateinit var usuarioActual: String
     private lateinit var rolActual: String
+    private val idsSeleccionadasIA = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,17 +32,14 @@ class ReportesActivity : AppCompatActivity() {
         contenedor = findViewById(R.id.contenedorReportes)
         findViewById<Button>(R.id.btnRetorno_ini_gener).setOnClickListener { finish() }
 
-        // 1. Cargamos la lista de reportes
         cargarReportes()
-
-        // 2. Agregamos el botón de IA (solo si es ADMIN)
         configurarBotonIA()
     }
 
     private fun configurarBotonIA() {
         if (rolActual.uppercase() == "ADMIN") {
             val btnAI = Button(this)
-            btnAI.text = "📊 ANALIZAR TENDENCIAS CON IA"
+            btnAI.text = "📊 ANALIZAR SELECCIONADOS CON IA"
             btnAI.setBackgroundColor(Color.parseColor("#1A237E"))
             btnAI.setTextColor(Color.WHITE)
 
@@ -52,16 +51,20 @@ class ReportesActivity : AppCompatActivity() {
             btnAI.layoutParams = params
 
             btnAI.setOnClickListener {
-                val intent = Intent(this, AnalisisIAActivity::class.java)
-                startActivity(intent)
+                if (idsSeleccionadasIA.isEmpty()) {
+                    Toast.makeText(this, "Selecciona al menos un inventario", Toast.LENGTH_SHORT).show()
+                } else {
+                    val intent = Intent(this, AnalisisIAActivity::class.java)
+                    intent.putExtra("IDS_SELECCIONADAS", idsSeleccionadasIA.joinToString(","))
+                    startActivity(intent)
+                }
             }
-
-            // Lo añadimos al principio del contenedor (índice 0)
             contenedor.addView(btnAI, 0)
         }
     }
 
     private fun cargarReportes() {
+        idsSeleccionadasIA.clear()
         Thread {
             try {
                 val url = URL("http://10.0.2.2/inventario/obtener_reportes.php")
@@ -75,18 +78,9 @@ class ReportesActivity : AppCompatActivity() {
                 val respuesta = conexion.inputStream.bufferedReader().readText().trim()
 
                 runOnUiThread {
-                    // Al recargar, guardamos el botón de IA si existe para no borrarlo
-                    val vistaIA = if (rolActual.uppercase() == "ADMIN") contenedor.getChildAt(0) else null
-
+                    val vistaIA = if (contenedor.childCount > 0 && contenedor.getChildAt(0) is Button) contenedor.getChildAt(0) else null
                     contenedor.removeAllViews()
-
-                    // Re-insertamos el botón de IA si existía
-                    if (vistaIA is Button) {
-                        contenedor.addView(vistaIA)
-                    } else if (rolActual.uppercase() == "ADMIN") {
-                        // Si por alguna razón se perdió, lo volvemos a configurar
-                        configurarBotonIA()
-                    }
+                    if (vistaIA != null) contenedor.addView(vistaIA)
 
                     if (respuesta.isNotEmpty() && !respuesta.startsWith("Error")) {
                         val filas = respuesta.split(";")
@@ -118,6 +112,15 @@ class ReportesActivity : AppCompatActivity() {
         cabecera.orientation = LinearLayout.HORIZONTAL
         cabecera.setPadding(35, 35, 35, 35)
         cabecera.gravity = Gravity.CENTER_VERTICAL
+
+        // 🔘 CHECKBOX PARA IA (Solo ADMIN)
+        if (rolActual.uppercase() == "ADMIN") {
+            val check = CheckBox(this)
+            check.setOnClickListener {
+                if (check.isChecked) idsSeleccionadasIA.add(idInv) else idsSeleccionadasIA.remove(idInv)
+            }
+            cabecera.addView(check)
+        }
 
         val tvInfo = TextView(this)
         val fechaCorta = if(fecha.length > 10) fecha.substring(0, 10) else fecha

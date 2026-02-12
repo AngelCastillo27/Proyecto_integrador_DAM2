@@ -12,6 +12,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.inventario_pi_v1.R
 import com.example.inventario_pi_v1.activities.departamentos.DepartamentosActivity
+import com.example.inventario_pi_v1.activities.departamentos.ReportesActivity
 import com.example.inventario_pi_v1.network.LocaleHelper
 
 class InicioGenericoActivity : AppCompatActivity() {
@@ -22,13 +23,13 @@ class InicioGenericoActivity : AppCompatActivity() {
     private lateinit var btnGenerarInventario: Button
     private lateinit var btnFinalizarInventario: Button
     private lateinit var btnReturn: Button
+    private lateinit var btnVerReportes: Button // Declaramos el botón
 
     private var usuarioId: Int = 0
     private lateinit var usuario: String
     private lateinit var rol: String
 
     override fun attachBaseContext(newBase: Context) {
-        // OBLIGATORIO: Ancla el idioma guardado al iniciar la actividad
         super.attachBaseContext(LocaleHelper.onAttach(newBase))
     }
 
@@ -42,6 +43,7 @@ class InicioGenericoActivity : AppCompatActivity() {
         btnGenerarInventario = findViewById(R.id.btnGenerarInventario)
         btnFinalizarInventario = findViewById(R.id.btnFinalizarInventario)
         btnReturn = findViewById(R.id.btnReturn)
+        btnVerReportes = findViewById(R.id.btnVerReportes) // Enlazamos el botón
 
         usuarioId = intent.getIntExtra("USUARIO_ID", 0)
         usuario = intent.getStringExtra("USUARIO") ?: ""
@@ -63,7 +65,15 @@ class InicioGenericoActivity : AppCompatActivity() {
         btnFinalizarInventario.setOnClickListener { confirmarFinalizarInventario() }
         btnReturn.setOnClickListener { finish() }
 
-        // Botones de idioma con transición suave
+        // ✅ FUNCIONALIDAD RESTAURADA
+        btnVerReportes.setOnClickListener {
+            val i = Intent(this, ReportesActivity::class.java)
+            i.putExtra("USUARIO", usuario)
+            i.putExtra("ROL", rol)
+            startActivity(i)
+        }
+
+        // Botones de idioma
         findViewById<ImageButton>(R.id.btnEs).setOnClickListener { aplicarCambioIdioma("es") }
         findViewById<ImageButton>(R.id.btnEn).setOnClickListener { aplicarCambioIdioma("en") }
         findViewById<ImageButton>(R.id.btnZh).setOnClickListener { aplicarCambioIdioma("zh") }
@@ -73,8 +83,6 @@ class InicioGenericoActivity : AppCompatActivity() {
 
     private fun aplicarCambioIdioma(lang: String) {
         LocaleHelper.setLocale(this, lang)
-        
-        // Reinicio suave de la actividad actual
         val intentActual = intent
         finish()
         startActivity(intentActual)
